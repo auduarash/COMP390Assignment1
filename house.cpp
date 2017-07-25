@@ -2,42 +2,42 @@
 #include "house.hpp"
 
 
-
-ROOF_POINTS get_roof_points(HOUSE &house) {
-    ROOF_POINTS rf;
-    rf.points.resize(3);
+using namespace std;
+vector<POINT2D> get_roof_points(HOUSE &house) {
+    vector<POINT2D> points;
+    points.resize(3);
     
-    //right edge of roof
-    rf.points[0].x = house.roof.roof_top_x + (house.roof.roof_width/2);
-    rf.points[0].y = house.roof.roof_top_y - (house.roof.roof_height);
     //top of roof
-    rf.points[1].x = house.roof.roof_top_x;
-    rf.points[1].y = house.roof.roof_top_y;
+    points[0].x = house.center_x;
+    points[0].y = house.center_y + (house.body_height / 2) + house.roof_height;
+    //right edge
+    points[1].x = points[0].x + (house.roof_width / 2);
+    points[1].y = points[0].y - house.roof_height;
     //left edge of roof
-    rf.points[2].x = house.roof.roof_top_x - (house.roof.roof_width/2);
-    rf.points[2].y = rf.points[0].y;
-    return rf;
+    points[2].x = points[0].x - (house.roof_width / 2);
+    points[2].y = points[0].y - house.roof_height;
+    return points;
 }
 
-HB_POINTS get_house_body_points(HOUSE &house) {
-    HB_POINTS hb;
-    hb.points.resize(4);
-    #define half_height house.body.height/2
-    #define half_width house.body.width/2
-    #define mid_x house.body.center_x
-    #define mid_y house.body.center_y
+vector<POINT2D> get_house_body_points(HOUSE &house) {
+    vector<POINT2D> points;
+    points.resize(4);
+    #define half_height house.body_height/2
+    #define half_width house.body_width/2
+    #define mid_x house.center_x
+    #define mid_y house.center_y
     //bottom left
-    hb.points[0].x = mid_x - half_height;
-    hb.points[0].y = mid_y - half_height;
+    points[0].x = mid_x - half_width;
+    points[0].y = mid_y - half_height;
     //top left
-    hb.points[1].x = mid_x - half_height;
-    hb.points[1].y = mid_y + half_height;
+    points[1].x = mid_x - half_width;
+    points[1].y = mid_y + half_height;
     //top right
-    hb.points[2].x = mid_x + half_height;
-    hb.points[2].y = mid_y + half_height;
+    points[2].x = mid_x + half_width;
+    points[2].y = mid_y + half_height;
     //bottom right
-    hb.points[3].x = mid_x + half_height;
-    hb.points[3].y = mid_y - half_height;
+    points[3].x = mid_x + half_width;
+    points[3].y = mid_y - half_height;
 
-    return hb;
+    return points;
 }

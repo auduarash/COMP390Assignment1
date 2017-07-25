@@ -3,24 +3,25 @@
 #include <math.h>
 #include "house.hpp"
 
+using namespace std;
 
 HOUSE h; //house containing parameters
-ROOF_POINTS rfPoints; // points for the roof
-HB_POINTS hbPoints; //points for the house body
+vector<POINT2D> rfPoints; // points for the roof
+vector<POINT2D> hbPoints; //points for the house body
 POINT2D center;
 
 
 void set_house_values() {
-    //setting the house parameters
-    h.body.center_x = center.x;
-    h.body.center_y = center.y;
-    h.body.width = 40;
-    h.body.height = 40;
-    h.roof.roof_top_x = center.x;
-    h.roof.roof_top_y = center.y + 30;
-    h.roof.roof_height = 10;
-    h.roof.roof_width = 50;
-    h.angle = 30;
+    //setting the house parameters (height and width)
+    h.body_width = 30;
+    h.body_height = 50;
+    h.roof_height = 10;
+    h.roof_width = 60;
+
+    //setting the house position
+    h.center_x = center.x;
+    h.center_y = center.y;
+    h.angle = 25;
 
     rfPoints = get_roof_points(h);
     hbPoints = get_house_body_points(h);
@@ -47,8 +48,8 @@ void render() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glLineWidth(1.3);
     glBegin(GL_POLYGON);
-    for (POINT2D p: rfPoints.points) {
-        cout << p.x << " " << p.y << endl;
+    for (POINT2D p: rfPoints) {
+        // cout << p.x << " " << p.y << endl;
         POINT2D p2 = rotate(p, h.angle);
         glVertex2f(p2.x, p2.y);
     }
@@ -58,8 +59,8 @@ void render() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glBegin(GL_POLYGON);
 
-    for (POINT2D p: hbPoints.points) {
-        cout << p.x << " " << p.y << endl;
+    for (POINT2D p: hbPoints) {
+        // cout << p.x << " " << p.y << endl;
         POINT2D p2 = rotate(p, h.angle);
         glVertex2f(p2.x, p2.y);
     }
@@ -70,18 +71,18 @@ void render() {
 void render_normal() {
 	// points color
     glColor3f(0.0, 0.0, 0.0);
-    center.x = 20; center.y = 30;
+    center.x = 100; center.y = 120;
     set_house_values();
     glDisable(GL_BLEND);
     glDisable(GL_LINE_SMOOTH);
-    center.x = 20; center.y = -30;
+    center.x = 80; center.y = 40;
     render();
 }
 
 void render_smoothed() {
 	// points color
     glColor3f(0.0, 0.0, 0.0);
-    center.x = 20; center.y = -30;
+    center.x = 100; center.y = 40;
     set_house_values();
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_BLEND);
@@ -103,7 +104,7 @@ void reshape(int w, int h) {
     glViewport(0, 0, (GLsizei)w, (GLsizei)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-1.0, 1.0, -1.0, 1.0, 0.1, 40.0);
+    glFrustum(0.0, 1.0, 0.0, 1.0, 0.05, 40.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
