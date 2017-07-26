@@ -3,8 +3,8 @@
 
 
 using namespace std;
-vector<POINT2D> get_roof_points(HOUSE &house) {
-    vector<POINT2D> points;
+vector<wcPt2D> get_roof_points(House &house) {
+    vector<wcPt2D> points;
     points.resize(3);
     
     //top of roof
@@ -19,8 +19,8 @@ vector<POINT2D> get_roof_points(HOUSE &house) {
     return points;
 }
 
-vector<POINT2D> get_house_body_points(HOUSE &house) {
-    vector<POINT2D> points;
+vector<wcPt2D> get_house_body_points(House &house) {
+    vector<wcPt2D> points;
     points.resize(4);
     #define half_height house.body_height/2
     #define half_width house.body_width/2
