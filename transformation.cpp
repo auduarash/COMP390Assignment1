@@ -1,3 +1,16 @@
+/*
+Name: Abdul-Rasheed Audu
+Student#: 3253834
+Course: COMP390
+Assignment: 1
+Problem: 2
+
+Purpose: Draw a number of houses using translations
+    and rotations. Only one method is used without changing
+    any values but the rotations and translations set up before
+    help with the results
+*/
+
 #include <GL/glut.h>
 #include <iostream> 
 #include <math.h>
@@ -5,32 +18,21 @@
 
 using namespace std;
 
-House h; //house containing parameters
-vector<wcPt2D> rfPoints; // points for the roof
-vector<wcPt2D> hbPoints; //points for the house body
+const float ROTATION_ANGLE = 10;
+House *house; //house containing parameters
 wcPt2D center;
 
 
 void set_house_values() {
     //setting the house parameters (height and width)
-    h.body_width = 40;
-    h.body_height = 40;
-    h.roof_height = 10;
-    h.roof_width = 50;
-
-    //setting the house position
-    h.center_x = center.x;
-    h.center_y = center.y;
-    h.angle = 0;
-
-    rfPoints = get_roof_points(h);
-    hbPoints = get_house_body_points(h);
+    house->set_center(center.x, center.y);
 }
 
 void initialize() {
     glClearColor(1.0, 1.0, 1.0, 0.0);
-
-    set_house_values();
+    house = new House(0, 0);
+    house->set_body_dimensions(1.0, 1.0);
+    house->set_roof_dimensions(0.5, 1.5);
 }
 
 wcPt2D rotate(wcPt2D &point,double degree) {
@@ -48,10 +50,8 @@ void render() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glLineWidth(1.3);
     glBegin(GL_POLYGON);
-    for (wcPt2D p: rfPoints) {
-        // cout << p.x << " " << p.y << endl;
-        wcPt2D p2 = rotate(p, h.angle);
-        glVertex2f(p2.x, p2.y);
+    for (wcPt2D p: house->get_roof_points()) {
+        glVertex2f(p.x, p.y);
     }
     glEnd();
 
@@ -59,10 +59,8 @@ void render() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glBegin(GL_POLYGON);
 
-    for (wcPt2D p: hbPoints) {
-        // cout << p.x << " " << p.y << endl;
-        wcPt2D p2 = rotate(p, h.angle);
-        glVertex2f(p2.x, p2.y);
+    for (wcPt2D p: house->get_body_points()) {
+        glVertex2f(p.x, p.y);
     }
     glEnd();
 
@@ -71,7 +69,7 @@ void render() {
 void render_houses() {
 	// points color
     glColor3f(0.0, 0.0, 0.0);
-    center.x = 0; center.y = 20;
+    center.x = 0; center.y = 2.0;
     set_house_values();
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_BLEND);
@@ -81,10 +79,10 @@ void render_houses() {
     //render centre house
     render();
 
-    int x_dis = 80;
-    int y_dis = -30;
+    float x_dis = 0.9;
+    float y_dis = -0.3;
     int z_dis = 1;
-    int angle = -25;
+    float angle = -30;
 
     for (int i = -2; i <= 2; i++) {
 
@@ -92,7 +90,7 @@ void render_houses() {
         int no_transforms = abs(i);
         int multiplier = (i < 0 ? -1 : 1);
         for (int j = 0; j < no_transforms; j++) {
-            glTranslatef(multiplier * x_dis, abs(multiplier)*y_dis, z_dis);
+            glTranslatef(multiplier * x_dis, abs(multiplier)*y_dis, 0);
             glRotatef(multiplier*angle, 0, 0, 1);
         }
         render();
@@ -104,7 +102,7 @@ void render_houses() {
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt(0.0, 0.0, 12.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     render_houses();
     
     glutSwapBuffers();
