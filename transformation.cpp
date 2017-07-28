@@ -90,7 +90,7 @@ void render_houses() {
         int no_transforms = abs(i);
         int multiplier = (i < 0 ? -1 : 1);
         for (int j = 0; j < no_transforms; j++) {
-            glTranslatef(multiplier * x_dis, abs(multiplier)*y_dis, 0);
+            glTranslatef(multiplier * x_dis, abs(multiplier)*y_dis, 0 );
             glRotatef(multiplier*angle, 0, 0, 1);
         }
         render();
